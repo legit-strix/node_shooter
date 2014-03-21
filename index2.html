@@ -1,0 +1,33 @@
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+$(document).ready(function() {
+	var sections = [{'id':'11112201410','crn':'11112', 'term_code':201410, 'seats_avail':5},
+	{'id':'11113201410','crn':11113, 'term_code':201410, 'seats_avail':20},
+	{'id':'11114201410','crn':11114, 'term_code':201410, 'seats_avail':48}]
+	console.log(sections)
+	for(var i=0;i<sections.length;i++){
+		$('#sections').append('<div id='+sections[i].id+'><b>CRN:</b> '+sections[i].crn+'</div><div id='+sections[i].id+'seats><b>SEATS:</b> '+sections[i].seats_avail+'</div>')
+	}
+    var socket = io.connect('http://134.250.79.98:8080');
+    socket.on('seats available', function (data) {
+        console.log(data);
+        $('#trigger').html(data.trigger)
+        $('#crn').html(data.crn)
+        $('#term-code').html(data.term_code)
+        $('#seats-available').html(data.seats_available)
+        var id = data.crn+''+data.term_code
+        for(var i=0;i<sections.length;i++){
+        	if(sections[i].id==id){
+        		$('#'+sections[i].id+'seats').html('SEATS: '+data.seats_available) // This should work.  Check it with Bryce
+        	}
+        }
+    });
+})
+</script>
+Seats available listener
+<p id="trigger"></p>
+<p id="crn"></p>
+<p id="term-code"></p>
+<p id="seats-available"></p>
+<div id="sections"></div>
