@@ -1,17 +1,24 @@
-var http = require('http'),
-    fs = require('fs'),
+// var http = require('http'),
+//     fs = require('fs')
     // NEVER use a Sync function except at start-up!
-    index = fs.readFileSync(__dirname + '/index.html');//fs.readFileSync('/Users/branceboren/workspace/node_shooter/index.html')
-    console.log(__dirname)
+    // index = fs.readFileSync(__dirname + '/index.html');//fs.readFileSync('/Users/branceboren/workspace/node_shooter/index.html')
+    // console.log(__dirname)
 
 // Send index.html to all requests
-var app = http.createServer(function(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(index);
-});
-
+// Check this link out for weird express 2.x to 3.x migration: https://github.com/visionmedia/express/wiki/Migrating-from-2.x-to-3.x
+var express = require('express')
+var http = require('http')
+var app = express()
+app.use(express.static(__dirname+'/public'))
+var server = http.createServer(app)
 // Socket.io server listens to our app
-var io = require('socket.io').listen(app);
+var io = require('socket.io').listen(server);
+
+app.get('/', function(req, res){
+    res.sendfile(__dirname+'/index.html')
+    // res.sendfile(__dirname+'/js/index.js')
+})
+
 var classes = [{section_id:"12345678", crn: "12345", termcode: "6789", seats_available:30}, {section_id:"23456789",crn: "4444", termcode: "5555", seats_available:9}]
 // Send current time to all connected clients
 function sendTime() {
@@ -63,4 +70,4 @@ io.sockets.on('connection', function(socket) {
     	}
     })
 });
-app.listen(8080);
+server.listen(8080);

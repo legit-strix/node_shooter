@@ -1,10 +1,4 @@
-<!doctype html>
-<html>
-    <head>
-        <script src='//code.jquery.com/jquery-1.7.2.min.js'></script>
-        <script src='/socket.io/socket.io.js'></script>
-        <script type="text/javascript">
-            var socket = io.connect('http://192.168.0.2:8080');
+var socket = io.connect('http://192.168.2.113:8080'); // subject to change
 			// socket.emit('course_list', ['12345678'])
             socket.on('welcome', function(data) {
                 $('#messages').append('<li>' + data.message + '</li>');
@@ -65,23 +59,3 @@
             
             socket.on('error', function() { console.error(arguments) });
             socket.on('message', function() { console.log(arguments) });
-            
-            
-            
-        </script>
-    </head>
-    <body>
-    	<div>
-    	<input type ="text" value='' id ="text-box"></input>
-    	<input type="button" id="text-button"></input>
-    	<div id="message-list">Messages:</div>
-    	<div id="message-words">Words: </div>
-    	<div>
-    		<a id='add-class'>Add Class</a> Seats Available: <span></span>
-    	</div>
-    	</div>
-    	<div>
-    	 <ul id='messages'></ul>
-    	 </div>
-    </body>
-</html>
