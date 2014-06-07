@@ -14,9 +14,15 @@ var server = http.createServer(app)
 // Socket.io server listens to our app
 var io = require('socket.io').listen(server);
 
-app.get('/', function(req, res){
-    res.sendfile(__dirname+'/index.html')
+app.get('/', function(req, res){ // probably don't need since it doesn't look like it's being used
+    res.sendfile(__dirname+'/public/index.html')
+    console.log("dirname from index "+__dirname)
     // res.sendfile(__dirname+'/js/index.js')
+})
+
+app.get('/shooter', function(req, res){
+	res.sendfile(__dirname+'/public/shooter.html')
+	console.log("root drectory = "+__dirname)
 })
 
 var classes = [{section_id:"12345678", crn: "12345", termcode: "6789", seats_available:30}, {section_id:"23456789",crn: "4444", termcode: "5555", seats_available:9}]
