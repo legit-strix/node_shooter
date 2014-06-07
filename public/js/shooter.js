@@ -63,8 +63,8 @@ window.onload = function(){
 	Player.prototype.shoot = function(bx, by){
 		console.log("X: "+bx)
 		console.log("Y: "+by)
-		var b = new Bullet(this.x, this.y, bx, by, "black", 20, 20)
-		bullets.push(b)
+		var bull = new Bullet(this.x, this.y, bx, by, "black", 20, 20)
+		bullets.push(bull)
 		console.log(bullets)
 	}
 	var me = new Player(100, 100, 20, "black")
@@ -81,6 +81,7 @@ window.onload = function(){
 		this.vy = vy
 	}
 	Bullet.prototype.draw = function(){
+		
 		var dirX = this.tx - this.x
 		var dirY = this.ty - this.y
 		var dirLen = Math.sqrt(dirX * dirX + dirY * dirY)
@@ -145,20 +146,18 @@ window.onload = function(){
 		*/
 		
 		if(bullets.length>0){
-			for(var i=0;i<bullets.length;i++){
-				var test_dirX = bullets[i].tx - bullets[i].x // combine this and draw maybe it's pretty much the same thing
-				var test_dirY = bullets[i].ty - bullets[i].y
-				var test_dirLen = Math.sqrt(test_dirX * test_dirX + test_dirY * test_dirY)
-				bullets[i].x = bullets[i].x+((test_dirX/test_dirLen)*bullets[i].vx)
-				bullets[i].y = bullets[i].y+((test_dirY/test_dirLen)*bullets[i].vy)
-				bullets[i].draw()
+			for(var i=0;i<bullets.length;i++){ // combine this and draw maybe it's pretty much the same thing
+				b = bullets[i]
+				var test_dirY = b.ty - b.y
+				var test_dirX = b.tx - b.x 
+				var test_dirLen = Math.sqrt(test_dirX * test_dirX + test_dirY * test_dirY) // distance between points aka hypotenuse
+				b.x = b.x+((test_dirX/test_dirLen)*b.vx)
+				b.y = b.y+((test_dirY/test_dirLen)*b.vy)
+				b.tx = b.tx+((test_dirX/test_dirLen)*b.vx)
+				b.ty = b.ty+((test_dirY/test_dirLen)*b.vy)
+				b.draw()
 			}
 		}
-		// if(aim.x && aim.y){
-		// 	// update the aimer dot position
-		// }
-		// update ball x, y position
-		// update bullet positions
 		// check for any collisions
 		if(map[87] && map[68]){ // up right
 			me.y-=me.v
