@@ -163,6 +163,12 @@ window.onload = function(){
 				b.tx = b.tx+((test_dirX/test_dirLen)*b.vx)
 				b.ty = b.ty+((test_dirY/test_dirLen)*b.vy)
 				b.draw()
+				for(var j=0;j<players.length;j++){
+					p = players[j]
+					if(b.x>=p.x-p.r && b.x<=p.x+p.r && b.y>=p.y-p.r && b.y<=p.y+p.r){
+						console.log("I've been shot!!!")
+					}
+				}
 				if(b.x>=W || b.x<=0 || b.y>=H || b.y<=0){
 					bullets.splice(i,1)
 				}
