@@ -48,7 +48,8 @@ window.onload = function(){
 		ctx.fillRect = (0,0,W,H)
 	}
 
-	function Player(x, y, r, c){
+	function Player(name, x, y, r, c){
+		this.name = name
 		this.x = x
 		this.y = y
 		this.r = r
@@ -64,16 +65,20 @@ window.onload = function(){
 	Player.prototype.shoot = function(bx, by){
 		console.log("X: "+bx)
 		console.log("Y: "+by)
-		var bull = new Bullet(this.x, this.y, bx, by, "black", 20, 20)
+		var bull = new Bullet(this.name, this.x, this.y, bx, by, "black", 20, 20)
 		bullets.push(bull)
 		console.log(bullets)
 	}
-	var me = new Player(100, 100, 20, "black")
-	var zombie = new Player(200, 200, 20, "blue")
+	Player.prototype.die = function(){
+		console.log("the embrace of death...")
+	}
+	var me = new Player("me", 100, 100, 20, "black")
+	var zombie = new Player("zom", 200, 200, 20, "blue")
 	players.push(me)
 	players.push(zombie)
 
-	function Bullet(ox, oy, tx, ty, c, vx, vy){ // add owner property
+	function Bullet(owner, ox, oy, tx, ty, c, vx, vy){ // add owner property
+		this.owner = owner
 		this.x = ox
 		this.y = oy
 		this.tx = tx
@@ -165,8 +170,9 @@ window.onload = function(){
 				b.draw()
 				for(var j=0;j<players.length;j++){
 					p = players[j]
-					if(b.x>=p.x-p.r && b.x<=p.x+p.r && b.y>=p.y-p.r && b.y<=p.y+p.r){
-						console.log("I've been shot!!!")
+					if(b.x>=p.x-p.r && b.x<=p.x+p.r && b.y>=p.y-p.r && b.y<=p.y+p.r && b.owner!=p.name){
+						console.log(p.name+" got hit by "+b.owner+"'s bullet!")
+						p.die()
 					}
 				}
 				if(b.x>=W || b.x<=0 || b.y>=H || b.y<=0){
