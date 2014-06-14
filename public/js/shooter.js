@@ -24,6 +24,7 @@ window.onload = function(){
 		W = window.innerWidth,
 		H = window.innerHeight,
 		bullets = [],
+		players = [],
 		aim = {},
 		points = 0,
 		fps = 60,
@@ -68,6 +69,9 @@ window.onload = function(){
 		console.log(bullets)
 	}
 	var me = new Player(100, 100, 20, "black")
+	var zombie = new Player(200, 200, 20, "blue")
+	players.push(me)
+	players.push(zombie)
 
 	function Bullet(ox, oy, tx, ty, c, vx, vy){ // add owner property
 		this.x = ox
@@ -116,7 +120,10 @@ window.onload = function(){
 		ctx.save()
 		ctx.clearRect(0, 0, W, H);
 		paintCanvas()
-		me.draw()
+		// me.draw()
+		for(var i=0; i<players.length; i++){
+			players[i].draw()
+		}
 		if(aim.x && aim.y){
 			aim.draw()
 		}
@@ -156,9 +163,14 @@ window.onload = function(){
 				b.tx = b.tx+((test_dirX/test_dirLen)*b.vx)
 				b.ty = b.ty+((test_dirY/test_dirLen)*b.vy)
 				b.draw()
+				if(b.x>=W || b.x<=0 || b.y>=H || b.y<=0){
+					bullets.splice(i,1)
+				}
 			}
 		}
 		// check for any collisions
+		
+		
 		if(map[87] && map[68]){ // up right
 			me.y-=me.v
 			me.x+=me.v
