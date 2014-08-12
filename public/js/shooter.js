@@ -1,3 +1,4 @@
+// var Player = require("player.js");
 window.onload = function(){
 	window.requestAnimFrame = (function(){
 		return  window.requestAnimationFrame       || 
@@ -53,7 +54,7 @@ window.onload = function(){
 		this.x = x
 		this.y = y
 		this.r = r
-		this.c = "black"
+		this.c = c
 		this.v = 5
 	}
 	Player.prototype.draw = function(){
@@ -72,8 +73,32 @@ window.onload = function(){
 	Player.prototype.die = function(){
 		console.log("the embrace of death...")
 	}
+	Player.prototype.move = function(){
+		if(map[87] && map[68]){ // up right
+			player.y-=player.v
+			player.x+=player.v
+		} else if(map[87] && map[65]){ // up left
+			player.y-=player.v
+			player.x-=player.v
+		} else if(map[83] && map[68]){ // down right
+			player.y+=player.v
+			player.x+=player.v
+		} else if(map[83] && map[65]){ // down left
+			player.y+=player.v
+			player.x-=player.v
+		} else if(map[87]){ // up
+			player.y-=player.v
+		} else if(map[83]){ // down
+			player.y+=player.v
+		} else if(map[68]){ // right
+			player.x+=player.v
+		} else if(map[65]){ // left
+			player.x-=player.v
+		}
+	}
+	
 	var me = new Player("me", 100, 100, 20, "black")
-	var zombie = new Player("zom", 200, 200, 20, "blue")
+	var zombie = new Player("zom", 200, 200, 20, "green")
 	players.push(me)
 	players.push(zombie)
 
@@ -180,30 +205,26 @@ window.onload = function(){
 				}
 			}
 		}
+		
 		// check for any collisions
 		
-		
-		if(map[87] && map[68]){ // up right
-			me.y-=me.v
-			me.x+=me.v
-		} else if(map[87] && map[65]){ // up left
-			me.y-=me.v
-			me.x-=me.v
-		} else if(map[83] && map[68]){ // down right
-			me.y+=me.v
-			me.x+=me.v
-		} else if(map[83] && map[65]){ // down left
-			me.y+=me.v
-			me.x-=me.v
-		} else if(map[87]){ // up
-			me.y-=me.v
-		} else if(map[83]){ // down
-			me.y+=me.v
-		} else if(map[68]){ // right
-			me.x+=me.v
-		} else if(map[65]){ // left
-			me.x-=me.v
+		for(var i=0; i<players.length; i++){
+			player = players[i]
+			checkBounds(player)
+			player.move()
+			if(player.x-player.r>=0 && player.x+player.r<=W && player.y-player.r<=H && player.y+player.r>=0){
+				// console.log("stuff")
+				// player.move()
+			}
+			else{
+				// console.log('blah')
+			}
+			// if(player.x-player.r>=0 && player.y-player.r>=0 && player.x+player.r<=W && player.y+player.r<=H){
+			// 	move()
+			// 	console.log("move that stuffs")
+			// }
 		}
+
 
 		// else{
 		// 	switch(e.keyCode){
@@ -218,6 +239,25 @@ window.onload = function(){
 		// 	}
 		// }
 
+	}
+	
+	function checkBounds(p){ // make more general for future use
+		if(p.x+p.r>=W){
+			console.log("OB")
+			p.x-=p.v
+		}
+		if(p.x-p.r<=0){
+			p.x+=p.v
+			console.log("OB LEFT")
+		}
+		if(p.y+p.r<=0){
+			p.y+=p.v
+			console.log("OB UP")
+		}
+		if(p.y-p.r>=H){
+			p.y-=p.v
+			console.log("OB DOWN")
+		}
 	}
 
 	function collides(p, b){
